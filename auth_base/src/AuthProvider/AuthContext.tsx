@@ -1,14 +1,24 @@
 import { createContext } from "react";
-interface AuthContextType{
-    user: string;
-    login: (email: string, password: string) => void;
-    logout: () => void;
-    loading: boolean;
+import { User } from "../types/User";
+interface AuthContextType {
+  user: User | null;
+  login: (email: string, password: string) => void;
+  logout: () => void;
+  userAcount: () => void;
+  hasRole: (roles: string[]) => boolean;
+  hasPermission: (permissions: string[]) => boolean;
+  loading: boolean;
 }
 
 export const AuthContext = createContext<AuthContextType>({
-  user: "",
-  login: async () => {},
+  user: null,
+  login: async () => {
+    console.log("Sin cargar contexto");
+    localStorage.removeItem("token");
+  },
   logout: () => {},
+  userAcount: () => {},
+  hasRole: () => false,
+  hasPermission: () => false,
   loading: false,
 });
