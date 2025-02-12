@@ -11,22 +11,22 @@ export default function AuthProvider({
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
-  useEffect(() => {
-    const getUser = async () => {
-      const token = localStorage.getItem("token");
-      const usr = localStorage.getItem("user");
+  const getUser = () => {
+    const token = localStorage.getItem("token");
+    const usr = localStorage.getItem("user");
 
-      if (token && token != null && usr && usr != null) {
-        try {
-          setUser(JSON.parse(usr));
-        } catch (err) {
-          console.log(err);
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
-        }
+    if (token && token != null && usr && usr != null) {
+      try {
+        setUser(JSON.parse(usr));
+      } catch (err) {
+        console.log(err);
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
       }
-      setLoading(false);
-    };
+    }
+    setLoading(false);
+  };
+  useEffect(() => {
     getUser();
   }, []);
 

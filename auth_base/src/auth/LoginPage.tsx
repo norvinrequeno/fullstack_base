@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../AuthProvider/AuthContext";
 import { useNavigate } from "react-router-dom";
+import Spinner from "../components/Spinner";
 
 export default function LoginPage() {
   const { login, loading } = useContext(AuthContext);
@@ -41,7 +42,7 @@ export default function LoginPage() {
         {error && (
           <p className="text-red-600 text-sm text-center mb-4">{error}</p>
         )}
-        {loading && <span>Iniciando sesión...</span>}
+        {loading && <Spinner />}
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">

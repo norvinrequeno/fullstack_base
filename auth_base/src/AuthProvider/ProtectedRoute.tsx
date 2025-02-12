@@ -5,7 +5,7 @@ import { Navigate } from "react-router-dom";
 type ProtectedRoute = {
   children: JSX.Element;
   allowedRoles?: string[];
-  allowedPermissions: string[];
+  allowedPermissions?: string[];
 };
 
 export default function ProtectedRoute({
@@ -15,25 +15,15 @@ export default function ProtectedRoute({
 }: ProtectedRoute) {
   const { user, hasRole, hasPermission, loading } = useAuth();
 
-  if (loading) {
-    console.log("Cargando... [protección de rutas]");
+  if (loading) return;
 
-    return;
-  }
-  console.log(user);
+  if (!user && user === null) return <Navigate to="/login" replace />;
 
-  if (!user && user === null) {
-    console.log("No tiene un usuario");
-    return <Navigate to="/login" replace />;
-  }
-
-  if (allowedRoles.length > 0 && !hasRole(allowedRoles)) {
-    console.log("No tiene asignado el rol requerido");
+  if (allowedRoles.length > 0 && !hasRole(allowedRoles))
     return <Navigate to="/unauthorized" replace />;
-  }
-  if (allowedPermissions.length > 0 && !hasPermission(allowedPermissions)) {
-    console.log("No tiene asignado el permiso requerido");
+
+  if (allowedPermissions.length > 0 && !hasPermission(allowedPermissions))
     return <Navigate to="/unauthorized" replace />;
-  }
+
   return children;
 }

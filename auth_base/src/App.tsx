@@ -5,6 +5,10 @@ import LoginPage from "./auth/LoginPage";
 import RegisterPage from "./auth/RegisterPage";
 import AuthProvider from "./AuthProvider/AuthProvider";
 import ProtectedRoute from "./AuthProvider/ProtectedRoute";
+import Unathorized from "./pages/errors/Unauthorized";
+import NotFound from "./pages/errors/NotFound";
+import Dashboard from "./pages/Dashboard";
+import Container from "./layouts/Container";
 function App() {
   return (
     <Router>
@@ -16,18 +20,23 @@ function App() {
           <Route
             path="/users/list"
             element={
-              <ProtectedRoute allowedPermissions={["admin_sys"]}>
-                <p>Listado de usuarios</p>
+              <ProtectedRoute allowedPermissions={["admin"]}>
+                <Container>
+                  <div className="text-xl">Listado de usuarios</div>
+                </Container>
               </ProtectedRoute>
             }
           />
-          <Route path="/" element={<h1>Dashboard</h1>} />
           <Route
-            path="/unauthorized"
+            path="/"
             element={
-              <h1>No tiene autorización para acceder a esta funcionalidad</h1>
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
             }
           />
+          <Route path="/unauthorized" element={<Unathorized />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </AuthProvider>
     </Router>

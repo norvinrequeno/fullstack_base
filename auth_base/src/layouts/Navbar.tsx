@@ -46,7 +46,10 @@ export default function Navbar() {
               </button>
 
               {dropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white text-gray-700 rounded-md shadow-lg py-2 z-50">
+                <div
+                  className="absolute right-0 mt-2 w-48 bg-white text-gray-700 rounded-md shadow-lg py-2 z-50"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
                   <Link
                     to="/change-password"
                     className="block px-4 py-2 hover:bg-gray-100"
