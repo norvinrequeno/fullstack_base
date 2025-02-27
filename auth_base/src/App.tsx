@@ -8,7 +8,7 @@ import ProtectedRoute from "./AuthProvider/ProtectedRoute";
 import Unathorized from "./pages/errors/Unauthorized";
 import NotFound from "./pages/errors/NotFound";
 import Dashboard from "./pages/Dashboard";
-import Container from "./layouts/Container";
+import RoutesApp from "./routes/RoutesApp";
 function App() {
   return (
     <Router>
@@ -17,16 +17,6 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route
-            path="/users/list"
-            element={
-              <ProtectedRoute allowedPermissions={["admin"]}>
-                <Container>
-                  <div className="text-xl">Listado de usuarios</div>
-                </Container>
-              </ProtectedRoute>
-            }
-          />
           <Route
             path="/"
             element={
@@ -37,6 +27,7 @@ function App() {
           />
           <Route path="/unauthorized" element={<Unathorized />} />
           <Route path="*" element={<NotFound />} />
+          {RoutesApp()}
         </Routes>
       </AuthProvider>
     </Router>
