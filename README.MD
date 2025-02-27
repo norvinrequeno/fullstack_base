@@ -10,7 +10,7 @@ Este es un proyecto fullstack con Laravel 11 y React 18 con TypeScript + Vite
 - Vite
 
 ## Instalación
-- Descargar el repositorio: git clone git@github.com:norvinrequeno/fullstack_base.git
+- Descargar el repositorio: <code>git clone git@github.com:norvinrequeno/fullstack_base.git</code>
 - Instalar dependencias de Laravel: composer install 
 - Instalar dependencias de React: npm install
 - Configurar archivo .env: Copiar .env.example como .env agregar las credenciales del gestor de base de datos variables de entorno; DB_CONNECTION, DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME,y DB_PASSWORD
