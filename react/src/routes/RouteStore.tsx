@@ -1,6 +1,6 @@
 import React from "react";
 import { PermissionsPage } from "../pages/PermissionsPage";
-import { RolesPage } from "../pages/RolesPage";
+import { RolesPage } from "../pages/roles/RolesPage";
 
 export interface menuItem {
   label: string;
@@ -14,8 +14,7 @@ export const MenuLinks: menuItem[] = [
   {
     label: "Roles",
     href: "/roles",
-    roles: ["admin", "superAdmin"],
-    permiso: ["permissionsAdmin"],
+
     element: <RolesPage />,
   },
 ];
