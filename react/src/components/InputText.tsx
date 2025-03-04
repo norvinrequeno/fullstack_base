@@ -15,7 +15,7 @@ export default function InputText({
   className = "",
 }: inputProps) {
   return (
-    <div className="mb-4">
+    <>
       {label && (
         <label
           htmlFor={label}
@@ -31,8 +31,8 @@ export default function InputText({
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder={placeholder}
-        className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 ${className}`}
+        className={`mt-1 block w-full rounded-md border-gray-700 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 ${className}`}
       />
-    </div>
+    </>
   );
 }

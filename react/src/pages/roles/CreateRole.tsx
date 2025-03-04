@@ -3,8 +3,13 @@ import InputText from "../../components/InputText";
 import axiosInstance from "../../config/axios.config";
 import axios from "axios";
 import Alert from "../../components/Alert";
+import { Save } from "lucide-react";
 
-export default function CreateRole() {
+export default function CreateRole({
+  addRoles,
+}: {
+  addRoles: (role: { cid: string; name: string }) => void;
+}) {
   const [role, setRole] = useState("");
   const [error, setError] = useState("");
   const handleSubmit = async (e: React.FormEvent) => {
@@ -16,6 +21,8 @@ export default function CreateRole() {
 
       if (status === 200) {
         setRole("");
+        const { role } = data;
+        if (role) addRoles(role);
         console.info(data);
       } else {
         setError(data.message);
@@ -27,19 +34,27 @@ export default function CreateRole() {
     }
   };
   return (
-    <form method="post" onSubmit={handleSubmit}>
+    <form
+      method="post"
+      onSubmit={handleSubmit}
+      className="my-4 p-6 border-2 border-gray-300 rounded-md flex gap-4"
+    >
       {error && (
-        <div className="my-3">
+        <div className="my-3 w-6/6">
           <Alert type="error" message={error} />
         </div>
       )}
-      <InputText value={role} setValue={setRole} label="Role" />
-      <div className="mb-4">
+
+      <div className="w-5/6">
+        <InputText value={role} setValue={setRole} label="Role" />
+      </div>
+      <div className="w-1/6 content-end">
         <button
           type="submit"
-          className="mt-4 inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          className="flex gap-3 px-6 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-900 transition"
         >
-          Guardar
+          <Save size={22}></Save>
+          <span>Guardar</span>
         </button>
       </div>
     </form>

@@ -106,5 +106,32 @@ class RolesController extends Controller
         }
     }
 
-    public function delete(Request $r) {}
+    public function delete(Request $r)
+    {
+        try {
+            $r->validate(['id' => ['required', 'string', 'max:255']]);
+            //Creación de rol utilizando el modelo de Spatie
+            $id = Crypt::decryptString($r->id);
+            $role = roles::destroy($id);
+            return response()->json(['message' => "Registro eliminado con éxito."]);
+        } catch (DecryptException $e) {
+            return response()
+                ->json(
+                    ['message' => 'Error al desencriptar el identificador proporcionado.'],
+                    JsonResponse::HTTP_BAD_REQUEST
+                );
+        } catch (ValidationException $e) {
+            return response()
+                ->json(
+                    ['message' => 'Es requerido proporcionar los parámetros (:id)'],
+                    JsonResponse::HTTP_UNPROCESSABLE_ENTITY
+                );
+        } catch (\Throwable $th) {
+            return response()
+                ->json(
+                    ['message' => 'Error interno' . $th->getMessage()],
+                    JsonResponse::HTTP_INTERNAL_SERVER_ERROR
+                );
+        }
+    }
 }

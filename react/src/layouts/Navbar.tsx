@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 import useAuth from "../AuthProvider/useAuth";
 import { MenuLinks } from "../routes/RouteStore";
 
-
-
 export default function Navbar() {
   const { user, logout, userAcount, hasRole, hasPermission } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -38,23 +36,21 @@ export default function Navbar() {
             </div>
           ) : (
             <div className="relative">
-              {hasRole(["superAdmin"]) && (
-                <button className="flex items-center gap-2 hover:bg-blue-500 px-4 py-2 rounded-md text-sm font-medium focus:outline-none">
-                  Control usuarios
-                </button>
-              )}
               <div className="hidden md:flex space-x-4">
-                {menuLinks.map((link, index) => (
-                   ((!link.permiso && !link.roles) || (hasPermission(link.permiso ?? [])) || (hasRole(link.roles ?? []))) &&(
-                  <Link
-                    key={index}
-                    to={link.href}
-                    className="hover:bg-blue-500 px-2 py-2 rounded-md text-sm font-medium"
-                  >
-                    {link.label}
-                  </Link>
-                )
-                ))}
+                {menuLinks.map(
+                  (link, index) =>
+                    ((!link.permiso && !link.roles) ||
+                      hasPermission(link.permiso ?? []) ||
+                      hasRole(link.roles ?? [])) && (
+                      <Link
+                        key={index}
+                        to={link.href}
+                        className="hover:bg-blue-500 px-2 py-2 rounded-md text-sm font-medium"
+                      >
+                        {link.label}
+                      </Link>
+                    )
+                )}
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                   className="hover:bg-blue-500 px-2 py-2 rounded-md text-sm font-medium"

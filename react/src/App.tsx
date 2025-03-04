@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Navbar from "./layouts/Navbar";
-import LoginPage from "./auth/LoginPage";
-import RegisterPage from "./auth/RegisterPage";
+import LoginPage from "./pages/auth/LoginPage";
+import RegisterPage from "./pages/auth/RegisterPage";
 import AuthProvider from "./AuthProvider/AuthProvider";
 import ProtectedRoute from "./AuthProvider/ProtectedRoute";
 import Unathorized from "./pages/errors/Unauthorized";
