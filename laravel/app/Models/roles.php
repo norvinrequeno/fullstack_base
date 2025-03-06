@@ -14,6 +14,7 @@ class roles extends Model
     protected $table = "roles";
     protected $appends = ['cid'];
     protected $fillable = ['name', 'cid'];
+    protected $hidden = ['id', 'guard_name'];
     public function cid(): Attribute
     {
         return Attribute::make(

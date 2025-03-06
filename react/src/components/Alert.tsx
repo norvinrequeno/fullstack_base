@@ -1,8 +1,10 @@
+import { AlertType } from "../Types";
+
 export default function Alert({
   type = "info",
   message,
 }: {
-  type?: string;
+  type?: AlertType;
   message: string;
 }) {
   const alertStyles = {

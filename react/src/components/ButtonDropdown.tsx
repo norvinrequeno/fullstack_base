@@ -23,7 +23,7 @@ export default function ButtonDropdown({
       hasRole(rol ?? [])) && (
       <button
         onClick={onClickAction}
-        className={`flex gap-2 px-4 py-2 border-0 hover:bg-gray-100 ${className}`}
+        className={`flex gap-2 items-center px-4 py-2 border-0 hover:bg-gray-100 ${className}`}
       >
         {label ?? children}
       </button>

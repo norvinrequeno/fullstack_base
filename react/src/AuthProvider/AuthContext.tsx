@@ -1,10 +1,10 @@
 import { createContext } from "react";
-import { User } from "../types/User";
+import { User } from "../Types";
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => void;
   logout: () => void;
-  userAcount: () => void;
+  userAccount: () => void;
   hasRole: (roles: string[]) => boolean;
   hasPermission: (permissions: string[]) => boolean;
   loading: boolean;
@@ -17,7 +17,7 @@ export const AuthContext = createContext<AuthContextType>({
     localStorage.removeItem("token");
   },
   logout: () => {},
-  userAcount: () => {},
+  userAccount: () => {},
   hasRole: () => false,
   hasPermission: () => false,
   loading: false,

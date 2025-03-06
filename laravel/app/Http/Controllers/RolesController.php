@@ -83,7 +83,9 @@ class RolesController extends Controller
             $r->validate(['role' => ['required', 'string', 'max:255']]);
             //Creación de rol utilizando el modelo de Spatie
             $id = Crypt::decryptString($r->id);
-            $role = Role::where('id', $id)->update(['name' => $r->role]);
+            $role = roles::find($id);
+            $role->name = $r->role;
+            $role->save();
             return response()->json(['role' => $role]);
         } catch (DecryptException $e) {
             return response()

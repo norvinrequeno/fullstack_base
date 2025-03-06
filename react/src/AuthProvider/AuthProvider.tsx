@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
 import axiosInstance from "../config/axios.config";
 import { useNavigate } from "react-router-dom";
-import { User } from "../types/User";
+import { User } from "../Types";
 export default function AuthProvider({
   children,
 }: {
@@ -62,7 +62,7 @@ export default function AuthProvider({
     navigate("/login");
   };
 
-  const userAcount = async () => {
+  const userAccount = async () => {
     const { data } = await axiosInstance.get("user");
     setUser(data);
   };
@@ -78,7 +78,7 @@ export default function AuthProvider({
         login,
         logout,
         loading,
-        userAcount,
+        userAccount,
         hasRole,
         hasPermission,
       }}
