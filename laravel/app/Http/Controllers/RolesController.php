@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\permission_role;
 use App\Models\roles;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\JsonResponse;
@@ -30,9 +31,13 @@ class RolesController extends Controller
     {
         try {
             $r->validate(['id' => ['required', 'string', 'max:256']]);
-
+            $role = roles::find(Crypt::decryptString($r->id));
             return response()->json(
-                ['role' => roles::find(Crypt::decryptString($r->id))]
+                [
+                    'role' => $role,
+                    'permissions' => (new PermissionsController)->allPermissions(),
+                    'permissions_role' => $this->getPermissionsRole($role->id)
+                ]
             );
         } catch (DecryptException $e) {
             return response()
@@ -49,10 +54,15 @@ class RolesController extends Controller
         } catch (\Throwable $th) {
             return response()
                 ->json(
-                    ['message' => 'Error interno'],
+                    ['message' => 'Error interno' . $th->getMessage()],
                     JsonResponse::HTTP_INTERNAL_SERVER_ERROR
                 );
         }
+    }
+    public function getPermissionsRole($id)
+    {
+        if (!$id && $id == null) return [];
+        return permission_role::where("role_id", $id)->with("permissions")->get();
     }
     public function store(Request $r)
     {

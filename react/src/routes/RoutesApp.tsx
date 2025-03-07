@@ -1,11 +1,11 @@
 import { Route } from "react-router-dom";
 import ProtectedRoute from "../AuthProvider/ProtectedRoute";
-import { MenuLinks } from "./RouteStore";
+import { RoutesConfig } from "./RouteStore";
 
 export default function RoutesApp() {
   return (
     <>
-      {MenuLinks.map((link, index) => (
+      {RoutesConfig.map((link, index) => (
         <Route
           key={index}
           path={link.href}
