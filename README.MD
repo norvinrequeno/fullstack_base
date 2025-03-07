@@ -5,7 +5,7 @@ Este es un proyecto fullstack con Laravel 11 y React 18 con TypeScript + Vite
 ## Requerimientos
 - Composer
 - NODE
-- PHP +8.X
+- PHP +8.x
 - PostgreSQL
 - Vite
 
