@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Validation\ValidationException;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class RolesController extends Controller
@@ -142,6 +143,59 @@ class RolesController extends Controller
             return response()
                 ->json(
                     ['message' => 'Error interno' . $th->getMessage()],
+                    JsonResponse::HTTP_INTERNAL_SERVER_ERROR
+                );
+        }
+    }
+
+    public function permissionChange(Request $r)
+    {
+        try {
+            $r->validate(
+                [
+                    'role' => ['required', 'string', 'max:255'],
+                    'permission' => ["required", 'integer']
+                ]
+            );
+
+            $role = Role::find(Crypt::decryptString($r->role));
+            $permission = Permission::find($r->permission);
+
+            if ($role->hasPermissionTo($permission->name)) {
+                $role->revokePermissionTo($permission);
+                return response()->json(
+                    [
+                        "action" => 'revoke'
+                    ]
+                );
+            } else {
+                $role->givePermissionTo($permission);
+                return response()->json(
+                    [
+                        'permission_role' => permission_role::where("role_id", $role->id)
+                            ->where("permission_id", $permission->id)
+                            ->with("permissions")
+                            ->first(),
+                        "action" => 'give'
+                    ]
+                );
+            }
+        } catch (DecryptException $e) {
+            return response()
+                ->json(
+                    ['message' => 'Error al desencriptar el identificador proporcionado.'],
+                    JsonResponse::HTTP_BAD_REQUEST
+                );
+        } catch (ValidationException $e) {
+            return response()
+                ->json(
+                    ['message' => 'Es requerido proporcionar los parámetros (:role)'],
+                    JsonResponse::HTTP_UNPROCESSABLE_ENTITY
+                );
+        } catch (\Throwable $th) {
+            return response()
+                ->json(
+                    ['message' => 'Error interno ' . $th->getMessage()],
                     JsonResponse::HTTP_INTERNAL_SERVER_ERROR
                 );
         }

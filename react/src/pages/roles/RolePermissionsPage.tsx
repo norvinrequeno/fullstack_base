@@ -6,11 +6,14 @@ import { useParams } from "react-router-dom";
 import Spinner from "../../components/Spinner";
 import Alert from "../../components/Alert";
 import InputText from "../../components/InputText";
+import AddPermissionRole from "./AddPermissionRole";
 
 export default function RolePermissionsPage() {
   const { id } = useParams<{ id: string }>();
   const [role, setRole] = useState<role>();
-  const [permissionsRole, setPermissionsRole] = useState<Array<permisosRole>>();
+  const [permissionsRole, setPermissionsRole] = useState<Array<permisosRole>>(
+    []
+  );
   const [permissions, setPermissions] = useState<Array<permiso>>([]);
   const [loading, setLoading] = useState(true);
   const [permiso, setPermiso] = useState("");
@@ -28,6 +31,8 @@ export default function RolePermissionsPage() {
       permiso.length > 3
     );
   };
+  const inRole = (id: number) =>
+    permissionsRole?.some((perm) => perm.permission_id === id) ?? false;
 
   const createPermission = async () => {
     setMessage("");
@@ -81,7 +86,7 @@ export default function RolePermissionsPage() {
         <Alert message={message} type={typeAlert} setValue={setMessage} />
       )}
       <div className="flex gap-3 mt-3">
-        <div className="w-8/12 p-4 border border-gray-400 rounded-lg">
+        <div className="w-8/12 p-4 border border-gray-400 rounded-lg min-h-100">
           <div className="mb-4">Buscar permiso</div>
           <div className="flex gap-2 items-center">
             <div className="w-10/12">
@@ -111,10 +116,14 @@ export default function RolePermissionsPage() {
             {searchPermission &&
               searchPermission.length > 0 &&
               searchPermission.map((perm) => (
-                <div className="flex gap-2" key={perm.id}>
-                  <input type="checkbox" id={perm.name + perm.id} />
-                  <label htmlFor={perm.name + perm.id}>{perm.name}</label>
-                </div>
+                <AddPermissionRole
+                  role_id={id ?? ""}
+                  perm={perm}
+                  key={perm.id}
+                  isAdd={inRole(perm.id)}
+                  setUpdate={setPermissionsRole}
+                  value={permissionsRole}
+                />
               ))}
           </div>
         </div>
