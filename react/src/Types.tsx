@@ -18,4 +18,15 @@ export interface permisosRole {
   permission_id: number;
   permissions: permiso;
 }
+
+export interface Users {
+  id: number;
+  name: string;
+  email: string;
+}
+export interface UsersRole {
+  role_id: number;
+  user_id: number;
+  users: Users;
+}
 export type AlertType = "success" | "error" | "warning" | "info";

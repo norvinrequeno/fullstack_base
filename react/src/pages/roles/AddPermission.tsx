@@ -2,18 +2,18 @@ import { useState } from "react";
 import { permiso, permisosRole } from "../../Types";
 import axiosInstance from "../../config/axios.config";
 
-export default function AddPermissionRole({
+export default function AddPermission({
   role_id,
   perm,
   isAdd,
   setUpdate,
-  value,
+  setDelete,
 }: {
   role_id: string;
   perm: permiso;
   isAdd: boolean;
-  value: Array<permisosRole>;
-  setUpdate: React.Dispatch<React.SetStateAction<Array<permisosRole>>>;
+  setUpdate: (element: permisosRole) => void;
+  setDelete: (id: number) => void;
 }) {
   const [inRole, setInRole] = useState(isAdd);
 
@@ -27,11 +27,11 @@ export default function AddPermissionRole({
       if (status && status == 200) {
         if (data.permission_role && data.action == "give") {
           //se agrega al state
-          setUpdate([...value, data.permission_role]);
+          setUpdate(data.permission_role);
           setInRole(true);
         } else {
           //se elimina del state
-          setUpdate((prev) => prev.filter((e) => e.permission_id !== perm.id));
+          setDelete(perm.id);
           setInRole(false);
         }
       }
@@ -42,7 +42,7 @@ export default function AddPermissionRole({
 
   return (
     <label
-      className="flex gap-2 shadow-sm p-4 m-2 cursor-pointer bg-white hover:bg-blue-700 hover:text-white"
+      className="flex gap-2 border border-gray-200 p-4 mb-2 rounded-md cursor-pointer bg-white hover:bg-blue-700 hover:text-white hover:border-blue-900"
       htmlFor={perm.name + perm.id}
     >
       <input

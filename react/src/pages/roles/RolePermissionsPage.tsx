@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Container from "../../layouts/Container";
 import { AlertType, permiso, permisosRole, role } from "../../Types";
 import axiosInstance from "../../config/axios.config";
@@ -6,7 +6,8 @@ import { useParams } from "react-router-dom";
 import Spinner from "../../components/Spinner";
 import Alert from "../../components/Alert";
 import InputText from "../../components/InputText";
-import AddPermissionRole from "./AddPermissionRole";
+import AddPermissionRole from "./AddPermission";
+import DeletePermission from "./DeletePermission";
 
 export default function RolePermissionsPage() {
   const { id } = useParams<{ id: string }>();
@@ -20,19 +21,20 @@ export default function RolePermissionsPage() {
   const [message, setMessage] = useState("");
   const [typeAlert, setTypeAlert] = useState<AlertType>("info");
 
-  const searchPermission = permissions?.filter((perm) =>
-    perm.name.toLowerCase().includes(permiso.toLowerCase())
+  const searchPermission = useMemo(
+    () =>
+      permissions?.filter((perm) =>
+        perm.name.toLowerCase().includes(permiso.toLowerCase())
+      ),
+    [permissions, permiso]
   );
 
-  const canAdd = () => {
-    return (
-      (!searchPermission || searchPermission.length == 0) &&
-      permiso &&
-      permiso.length > 3
-    );
-  };
-  const inRole = (id: number) =>
-    permissionsRole?.some((perm) => perm.permission_id === id) ?? false;
+  const canAdd = () =>
+    searchPermission?.length === 0 && permiso.trim().length > 3;
+  const inRole = useCallback(
+    (id: number) => permissionsRole.some((perm) => perm.permission_id === id),
+    [permissionsRole]
+  );
 
   const createPermission = async () => {
     setMessage("");
@@ -56,6 +58,21 @@ export default function RolePermissionsPage() {
       setTypeAlert("error");
     }
   };
+
+  const addPermission = useCallback(
+    (element: permisosRole) =>
+      setPermissionsRole([...permissionsRole, element]),
+    [permissionsRole]
+  );
+
+  const deletePermission = useCallback(
+    (id: number) =>
+      setPermissionsRole(
+        permissionsRole.filter((perm) => perm.permission_id !== id)
+      ),
+    [permissionsRole]
+  );
+
   useEffect(() => {
     const getRole = async () => {
       try {
@@ -112,17 +129,17 @@ export default function RolePermissionsPage() {
             </div>
           </div>
 
-          <div className="block">
+          <div className="block mt-4">
             {searchPermission &&
               searchPermission.length > 0 &&
               searchPermission.map((perm) => (
                 <AddPermissionRole
                   role_id={id ?? ""}
                   perm={perm}
-                  key={perm.id}
+                  key={`${perm.id}-${inRole(perm.id)}`}
                   isAdd={inRole(perm.id)}
-                  setUpdate={setPermissionsRole}
-                  value={permissionsRole}
+                  setUpdate={addPermission}
+                  setDelete={deletePermission}
                 />
               ))}
           </div>
@@ -131,12 +148,12 @@ export default function RolePermissionsPage() {
           <div className="text-lg mb-4">Listado de permisos agregados</div>
           {permissionsRole && permissionsRole.length > 0 ? (
             permissionsRole.map((permission) => (
-              <div
-                className="flex"
+              <DeletePermission
+                role_id={id ?? ""}
+                element={permission}
+                setDelete={deletePermission}
                 key={`r_${permission.role_id}_p_${permission.permission_id}`}
-              >
-                {permission.permissions.name}
-              </div>
+              />
             ))
           ) : (
             <Alert message="Aun no se han agregado permisos" />

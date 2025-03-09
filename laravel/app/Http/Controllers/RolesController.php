@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\permission_role;
 use App\Models\roles;
+use App\Models\User;
+use App\Models\user_role;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -199,5 +201,44 @@ class RolesController extends Controller
                     JsonResponse::HTTP_INTERNAL_SERVER_ERROR
                 );
         }
+    }
+
+
+    public function users(Request $r)
+    {
+        try {
+            $r->validate(['id' => ['required', 'string', 'max:256']]);
+            $role = roles::find(Crypt::decryptString($r->id));
+            return response()->json(
+                [
+                    'role' => $role,
+                    'users' => User::all(),
+                    'users_role' => $this->getUsersRole($role->id)
+                ]
+            );
+        } catch (DecryptException $e) {
+            return response()
+                ->json(
+                    ['message' => 'Error al desencriptar el identificador proporcionado.'],
+                    JsonResponse::HTTP_BAD_REQUEST
+                );
+        } catch (ValidationException $e) {
+            return response()
+                ->json(
+                    ['message' => 'Es requerido proporcionar los parámetros (:id)'],
+                    JsonResponse::HTTP_UNPROCESSABLE_ENTITY
+                );
+        } catch (\Throwable $th) {
+            return response()
+                ->json(
+                    ['message' => 'Error interno' . $th->getMessage()],
+                    JsonResponse::HTTP_INTERNAL_SERVER_ERROR
+                );
+        }
+    }
+    public function getUsersRole($id)
+    {
+        if (!$id && $id == null) return [];
+        return user_role::where("role_id", $id)->with("users")->get();
     }
 }
