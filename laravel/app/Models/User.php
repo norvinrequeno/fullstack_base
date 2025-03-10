@@ -11,18 +11,10 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
-    /**
-     * @method \Laravel\Sanctum\NewAccessToken createToken(string $name, array $abilities = ['*'])
-     */
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    protected $guard_name = 'sanctum';
     protected $fillable = [
         'name',
         'email',

@@ -27,10 +27,12 @@ export default function AddUser({
       if (status && status == 200) {
         if (data.user_role && data.action == "give") {
           //se agrega al state
+          console.log("give");
           setUpdate(data.user_role);
           setInRole(true);
         } else {
           //se elimina del state
+          console.log("remove");
           setDelete(usr.id);
           setInRole(false);
         }

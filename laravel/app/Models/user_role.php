@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class user_role extends Model
@@ -14,7 +13,7 @@ class user_role extends Model
 
     public function users()
     {
-        return $this->belongsTo(Permission::class, 'model_id');
+        return $this->belongsTo(User::class, 'model_id');
     }
     public function roles()
     {

@@ -26,7 +26,7 @@ export interface Users {
 }
 export interface UsersRole {
   role_id: number;
-  user_id: number;
+  model_id: number;
   users: Users;
 }
 export type AlertType = "success" | "error" | "warning" | "info";

@@ -11,14 +11,16 @@ export default function DeleteUser({
   element: UsersRole;
   setDelete: (id: number) => void;
 }) {
+  console.log(element);
+
   const handleDelete = async () => {
     try {
       const { status } = await axiosInstance.post("roles/users/change", {
         role: role_id,
-        permission: element.user_id,
+        user: element.model_id,
       });
       if (status && status == 200) {
-        setDelete(element.user_id);
+        setDelete(element.model_id);
       }
     } catch (error) {
       console.error(error);
@@ -33,7 +35,9 @@ export default function DeleteUser({
         onClick={handleDelete}
       />
       {element.users.name}
-      {element.users.email}
+      <i className="ms-2">
+        <small>({element.users.email})</small>
+      </i>
     </div>
   );
 }

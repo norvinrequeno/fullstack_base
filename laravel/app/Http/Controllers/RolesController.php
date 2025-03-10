@@ -163,6 +163,11 @@ class RolesController extends Controller
             $role = Role::find(Crypt::decryptString($r->role));
             $permission = Permission::find($r->permission);
 
+            if (!$role)
+                return response()->json(['message' => 'El rol no existe.'], JsonResponse::HTTP_NOT_FOUND);
+            if (!$permission)
+                return response()->json(['message' => 'El permiso no existe.'], JsonResponse::HTTP_NOT_FOUND);
+
             if ($role->hasPermissionTo($permission->name)) {
                 $role->revokePermissionTo($permission);
                 return response()->json(
@@ -232,6 +237,63 @@ class RolesController extends Controller
             return response()
                 ->json(
                     ['message' => 'Error interno' . $th->getMessage()],
+                    JsonResponse::HTTP_INTERNAL_SERVER_ERROR
+                );
+        }
+    }
+    public function userChange(Request $r)
+    {
+        try {
+            $r->validate(
+                [
+                    'role' => ['required', 'string', 'max:255'],
+                    'user' => ["required", 'integer']
+                ]
+            );
+
+            $role = Role::find(Crypt::decryptString($r->role));
+            $user = User::find($r->user);
+
+            if (!$role)
+                return response()->json(['message' => 'El rol no existe.'], JsonResponse::HTTP_NOT_FOUND);
+            if (!$user)
+                return response()->json(['message' => 'El usuario no existe.'], JsonResponse::HTTP_NOT_FOUND);
+
+
+            if ($user->hasRole($role->name)) {
+                $user->removeRole($role->name);
+                return response()->json(
+                    [
+                        "action" => 'revoke'
+                    ]
+                );
+            } else {
+                $user->assignRole($role->name);
+                return response()->json(
+                    [
+                        'user_role' => user_role::where("role_id", $role->id)
+                            ->where('model_id', $user->id)->with("users")
+                            ->first(),
+                        "action" => 'give'
+                    ]
+                );
+            }
+        } catch (DecryptException $e) {
+            return response()
+                ->json(
+                    ['message' => 'Error al desencriptar el identificador proporcionado.'],
+                    JsonResponse::HTTP_BAD_REQUEST
+                );
+        } catch (ValidationException $e) {
+            return response()
+                ->json(
+                    ['message' => 'Es requerido proporcionar los parámetros (:role y :user)'],
+                    JsonResponse::HTTP_UNPROCESSABLE_ENTITY
+                );
+        } catch (\Throwable $th) {
+            return response()
+                ->json(
+                    ['message' => 'Error interno ' . $th->getMessage()],
                     JsonResponse::HTTP_INTERNAL_SERVER_ERROR
                 );
         }

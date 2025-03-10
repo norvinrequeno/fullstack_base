@@ -19,7 +19,7 @@ export default function RoleUsersPage() {
   const [message, setMessage] = useState("");
   const [typeAlert, setTypeAlert] = useState<AlertType>("info");
 
-  const searchPermission = useMemo(
+  const searchUser = useMemo(
     () =>
       users?.filter((perm) =>
         perm.name.toLowerCase().includes(search.toLowerCase())
@@ -28,7 +28,7 @@ export default function RoleUsersPage() {
   );
 
   const inRole = useCallback(
-    (id: number) => usersRole.some((user) => user.user_id === id),
+    (user_id: number) => usersRole.some((user) => user.model_id === user_id),
     [usersRole]
   );
 
@@ -38,7 +38,8 @@ export default function RoleUsersPage() {
   );
 
   const deleteUser = useCallback(
-    (id: number) => setUsersRole(usersRole.filter((usr) => usr.user_id !== id)),
+    (id: number) =>
+      setUsersRole(usersRole.filter((usr) => usr.model_id !== id)),
     [usersRole]
   );
 
@@ -50,6 +51,8 @@ export default function RoleUsersPage() {
           id,
         });
         if (status && status == 200) {
+          console.log(data.users_role);
+
           setRole(data.role);
           setUsersRole(data.users_role ?? []);
           setUsers(data.users ?? []);
@@ -85,9 +88,9 @@ export default function RoleUsersPage() {
           </div>
 
           <div className="block mt-4">
-            {searchPermission &&
-              searchPermission.length > 0 &&
-              searchPermission.map((usr) => (
+            {searchUser &&
+              searchUser.length > 0 &&
+              searchUser.map((usr) => (
                 <AddUser
                   role_id={id ?? ""}
                   usr={usr}
@@ -107,7 +110,7 @@ export default function RoleUsersPage() {
                 role_id={id ?? ""}
                 element={usr}
                 setDelete={deleteUser}
-                key={`r_${usr.role_id}_p_${usr.user_id}`}
+                key={`r_${usr.role_id}_p_${usr.model_id}`}
               />
             ))
           ) : (

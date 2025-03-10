@@ -11,4 +11,5 @@ Route::middleware('role:superAdmin')->group(function () {
     Route::post('/roles/update', [RolesController::class, 'update']);
     Route::post('/roles/delete', [RolesController::class, 'delete']);
     Route::post('/roles/permissions/change', [RolesController::class, 'permissionChange']);
+    Route::post('/roles/users/change', [RolesController::class, 'userChange']);
 });
