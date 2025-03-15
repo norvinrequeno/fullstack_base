@@ -24,7 +24,7 @@ export default function LinkDropdown({
     (hasRole(rol ?? []) && (
       <Link
         to={to}
-        className={`flex gap-2 px-4 py-2 items-center hover:bg-gray-100 ${className}`}
+        className={`flex gap-2 px-4 py-2 items-center hover:bg-stone-200 w-full cursor-pointer ${className}`}
       >
         {label ?? children}
       </Link>

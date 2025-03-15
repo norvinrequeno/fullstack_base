@@ -21,6 +21,7 @@ export interface permisosRole {
 
 export interface Users {
   id: number;
+  cid: string;
   name: string;
   email: string;
 }

@@ -1,8 +1,8 @@
 import React from "react";
-import { PermissionsPage } from "../pages/PermissionsPage";
 import { RolesPage } from "../pages/roles/RolesPage";
 import RolePermissionsPage from "../pages/roles/RolePermissionsPage";
 import RoleUsersPage from "../pages/roles/RoleUsersPage";
+import UsersPage from "../pages/users/UsersPage";
 
 export interface menuItem {
   label: string;
@@ -12,11 +12,16 @@ export interface menuItem {
   element: React.ReactElement;
 }
 export const MenuLinks: menuItem[] = [
-  { label: "Permisos", href: "/permisos", element: <PermissionsPage /> },
+  {
+    label: "Usuario",
+    href: "/usuarios",
+    roles: ["superAdmin"],
+    element: <UsersPage />,
+  },
   {
     label: "Roles",
     href: "/roles",
-
+    roles: ["superAdmin"],
     element: <RolesPage />,
   },
 ];
