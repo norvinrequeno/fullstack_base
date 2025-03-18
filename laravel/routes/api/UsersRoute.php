@@ -8,4 +8,5 @@ Route::middleware('role:superAdmin')->group(function () {
     Route::post('/users/store', [UsersController::class, 'store']);
     Route::post('/users/update', [UsersController::class, 'update']);
     Route::post('/users/reset/password', [UsersController::class, 'resetPassword']);
+    Route::post('/users/password', [UsersController::class, 'changePassword']);
 });

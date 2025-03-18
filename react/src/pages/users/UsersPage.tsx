@@ -16,6 +16,8 @@ export default function UsersPage() {
   const [message, setMessage] = useState("");
   const [typeMessage, setTypeMessage] = useState<AlertType>("info");
   const [createModal, setCreateModal] = useState(false);
+  const [updateModal, setUpdateModal] = useState(false);
+  const [user, setUser] = useState<Users>();
 
   useEffect(() => {
     getUsers();
@@ -39,7 +41,7 @@ export default function UsersPage() {
   const changeUsers = (user: Users) => {
     setUsers((prevUser) => {
       //Buscara si existe el hash de cid
-      const index = prevUser.findIndex((usr) => usr.cid === user.cid);
+      const index = prevUser.findIndex((usr) => usr.id === user.id);
       if (index !== -1) {
         //En el caso que exista creo una copia
         const updatePrev = [...prevUser];
@@ -52,8 +54,9 @@ export default function UsersPage() {
     });
   };
 
-  const editHandle = (user: Users) => {
-    console.log(user);
+  const editHandle = (userSelected: Users) => {
+    setUser(userSelected);
+    setUpdateModal(true);
   };
   const resetPassword = async (user: Users) => {
     try {
@@ -132,6 +135,15 @@ export default function UsersPage() {
       >
         <>
           <CreateUser setUsers={changeUsers} />
+        </>
+      </Modal>
+      <Modal
+        title={`Editar usuario ${user?.name}`}
+        isOpen={updateModal}
+        onClose={() => setUpdateModal(false)}
+      >
+        <>
+          <CreateUser setUsers={changeUsers} user={user} />
         </>
       </Modal>
     </Container>

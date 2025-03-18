@@ -2,6 +2,7 @@ import React from "react";
 interface inputProps {
   label?: string;
   value: string;
+  type?: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
   placeholder?: string;
   className?: string;
@@ -13,6 +14,7 @@ export default function InputText({
   setValue,
   placeholder = "Escriba aquí",
   className = "",
+  type = "text",
 }: inputProps) {
   return (
     <>
@@ -26,7 +28,7 @@ export default function InputText({
       )}
 
       <input
-        type="text"
+        type={type}
         id={label ?? ""}
         value={value}
         onChange={(e) => setValue(e.target.value)}

@@ -3,6 +3,7 @@ import { RolesPage } from "../pages/roles/RolesPage";
 import RolePermissionsPage from "../pages/roles/RolePermissionsPage";
 import RoleUsersPage from "../pages/roles/RoleUsersPage";
 import UsersPage from "../pages/users/UsersPage";
+import ChangePasswordPage from "../pages/users/ChangePasswordPage";
 
 export interface menuItem {
   label: string;
@@ -37,6 +38,12 @@ const RoutesInit: menuItem[] = [
     label: "Routes usuarios",
     href: "/role/usuarios/:id",
     element: <RoleUsersPage />,
+    roles: ["superAdmin"],
+  },
+  {
+    label: "Routes cambiar contraseña",
+    href: "/change-password",
+    element: <ChangePasswordPage />,
     roles: ["superAdmin"],
   },
 ];
